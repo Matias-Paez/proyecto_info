@@ -1,0 +1,24 @@
+{% extends 'layouts/base_layout.html' %}
+
+{% block title_layout %}
+    {% block title %}
+        Informatorio Blog
+    {% endblock title %}
+{% endblock title_layout %}
+
+
+{% block extra_head_layout %}
+    {% block extra_head %} {% endblock extra_head %}
+{% endblock extra_head_layout %}
+
+
+{% block content_layout %}
+    <main>
+        
+        {% block content %}
+            {% comment %}esto es lo que en realidad cambia --- ver bien el manejo luego{% endcomment %}
+        {% endblock content %}
+            
+    </main>
+{% endblock content_layout %}
+    
