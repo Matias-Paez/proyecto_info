@@ -1,0 +1,13 @@
+<nav>
+    <ul>
+        <li> <a href ="{% url 'home'%}"> Inicio </a> </li>
+        <li> <a href ="{% url 'post:post_detail' slug='solo-es-un-ejemplo'%}"> Ver Publicaciones </a> </li>
+        <li> <a href ="{% url 'user:user_profile'%}"> Ver Perfil </a> </li>
+    </ul>
+</nav>
+
+
+{% comment %}
+    esto lo a modo de ejemplo luego modificar , paso un slug de modo ejemplo solamente
+{% endcomment %}
+    

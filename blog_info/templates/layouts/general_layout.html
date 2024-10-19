@@ -13,12 +13,15 @@
 
 
 {% block content_layout %}
+    {% include 'includes/commons/header.html' %}
+    
     <main>
-        
         {% block content %}
             {% comment %}esto es lo que en realidad cambia --- ver bien el manejo luego{% endcomment %}
         {% endblock content %}
             
     </main>
+
+    {% include 'includes/commons/footer.html' %}
 {% endblock content_layout %}
     

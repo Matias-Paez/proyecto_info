@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'apps.post',
     'apps.user',
 ]
@@ -47,6 +48,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'blog_info.urls'
+
+#debo definir esto ya que cree mi propio modelo de usuario
+AUTH_USER_MODEL = 'user.User'
 
 TEMPLATES = [
     {
