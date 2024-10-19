@@ -7,8 +7,13 @@ import uuid
 
 
 # Create your models here. 
-#aqui voy a definir las categorias y los comentarios
+#Modelo de Categoria 
+class Category (models.Model):
+    id = models.UUIDField(primary_key= True, default= uuid.uuid4, editable=False)
+    name = models.CharField(max_length= 60)
+    description = models.TextField(max_length=120)
 
+#Modelo de Post
 class Post (models.Model):
     #defino los campos de mis post
     id = models.UUIDField(primary_key=True, default= uuid.uuid4, editable= False)
@@ -19,9 +24,9 @@ class Post (models.Model):
     creation_date = models.DateTimeField (default= timezone.now ) # capturo el timpo en que se creo
     modification_date = models.DateTimeField(auto_now= True) # actializo a la ultima fecha de modificación
     allow_comment = models.BooleanField(default=True) # defino si se permite comentarios
-    ################################################################################
-    category = models.ForeignKey ()  # aca defino la relacion con la categoria y la relacion con comentarios - Definir luego
-
+    #relacion con categoria
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)  # aca defino la relacion con la categoria y la relacion con comentarios - Definir luego
+    
     #metodos/funciones
     def __str__(self): 
         return self.title
@@ -39,20 +44,18 @@ class Post (models.Model):
         super().save(*args, **kwargs)
         #TODO : como manejo las imagenes de portada?
 
-
     def generate_unique_slug(self):
         slug = slugify(self.title) #le pasamos lo que tiene que hacer
-        #verifico que sea unico
         unique_slug = slug
         num = 1
+        #verifico que sea unico
         while Post.objects.filter(slug= unique_slug).exists(): # si existe coincidencias con los slug va a agregarle un numero
             unique_slug = f"{slug}-{num}"
             num += 1
 
         return unique_slug
 
-
-
+#Modelo de Comentarios
 class Comment (models.Model):
     #defino los atributos/campos de la entidad 
     id = models.UUIDField(primary_key= True, default= uuid.uuid4, editable=False)
@@ -61,18 +64,7 @@ class Comment (models.Model):
     #Foreinkey con el author
     author = models.ForeignKey(settings.AUTH_USER_MODEL , on_delete= models.CASCADE) # si elimino el usuario elimino todos sus comentarios
     #ForeinKey con el post
-    post = models.ForeignKey ( Post , on_delete= models.CASCADE, related_name='comments')
+    post = models.ForeignKey (Post , on_delete= models.CASCADE, related_name='comments')
 
     def __str__(self):
         return self.content  # cuando llamo se muestra su contenido 
-
-
-
-#VER LUEGO los foreinjey en categorias
-
-class Category (models.Model):
-    id = models.UUIDField(primary_key= True, default= uuid.uuid4, editable=False)
-    name = models.CharField(max_length= 80)
-    description = models.TextField(max_length=200)
-
-    #CRUD
