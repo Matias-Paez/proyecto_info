@@ -1,0 +1,55 @@
+{% extends 'layouts/auth_layout.html' %} 
+{% block title %}Iniciar sesión | Chaco Comparte {% endblock title %} 
+{% block content %}
+  <!-- Flecha de volver -->
+  <div class="absolute top-4 left-4">
+    <a href="javascript:history.back()" class="text-gray-400 hover:text-white">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </a>
+  </div>
+
+      <!-- Contenedor del formulario -->
+  <div class="bg-gray-800 rounded-xl shadow-2xl p-10 max-w-md w-full space-y-6">
+    <h2 class="text-4xl font-extrabold text-center tracking-tight text-white">Iniciar Sesión</h2>
+    
+    <!-- Formulario -->
+    <form action="{% url 'user:auth_login' %}" method="POST" class="space-y-4">
+      {% csrf_token %}
+      <!-- Campo Usuario -->
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-400">{{ form.username.label }}</label>
+        {{ form.username }}
+
+      </div>
+
+      <!-- Campo Contraseña -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-400">{{ form.password.label }}</label>
+        {{ form.password }}    
+      </div>
+
+      <!-- Botón de Iniciar Sesión -->
+      <div>
+        <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-200">
+          Iniciar Sesión
+        </button>
+      </div>
+    </form>
+
+    <!-- Enlace para registrarse -->
+    <div class="text-center">
+      <p class="text-gray-400">¿No tienes una cuenta? 
+        <a href="{% url 'user:auth_register'%}" class="text-blue-500 hover:text-blue-400 font-semibold">Regístrate aquí</a>.
+      </p>
+    </div>
+  </div>
+
+{% endblock content %}
+
+
+{% comment %}
+##esto debo colocarlo bien
+<class = "bg-gray-900 text-white min-h-screen flex flex-col justify-center items-center">
+{% endcomment %}

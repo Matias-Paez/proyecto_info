@@ -4,4 +4,7 @@ db.sqlite3
 migrations
 .vscode
 /blog_info/media/*
-
+/blog_info/media/**/avatar
+/blog_info/media/**/cover
+avatar
+cover

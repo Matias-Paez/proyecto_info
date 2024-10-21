@@ -1,13 +1,58 @@
+<!-- Navegación -->
+<nav class="space-x-4">
+      <a href="{% url 'home'%}" class="text-gray-400 hover:text-white">Inicio</a>
+      <a href="{% url 'post:post_detail' slug='solo-es-un-ejemplo'%}" class="text-gray-400 hover:text-white">Publicaciones Recientes</a>
+      <a href="#" class="text-gray-400 hover:text-white">Acerca de</a>
+
+      <!-- Si el usuario no está logueado -->
+      {% if not user.is_authenticated %}
+       <a href="{%url 'user:auth_login'%}" class="text-gray-400 hover:text-white">Iniciar Sesión</a>
+       {% else %}
+         <!-- Si el usuario está logueado (ejemplo básico de menú de usuario) -->
+        <div class="relative inline-block text-left">
+            <button class="flex items-center space-x-2 text-gray-400 hover:text-white">
+                <span>Perfil</span>
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <div class="hidden absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-1 z-20">
+                <a href="{%url 'user:user_profile'%}" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">Perfil</a>
+                <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">Configuración</a>
+
+                {% comment %} 
+                Django utiliza el método POST para cerrar sesión.El 
+                {% csrf_token %} se asegura de que Django valide la solicitud. 
+                {% endcomment %}
+                <form method="POST" action="{% url 'user:auth_logout' %}">
+                {% csrf_token %}
+                    <button type="submit" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">
+                        Cerrar Sesión
+                    </button>
+                </form>
+            </div>
+                    
+        </div>
+      {% endif %}
+      <!-- script aquí para el menu desplegable de perfil de la barra de navegación-->
+        <script>
+            document.querySelector('.relative').addEventListener('click', function() {
+            const dropdown = this.querySelector('.absolute');
+            dropdown.classList.toggle('hidden');
+            });
+        </script>
+</nav>
+      
+{% comment %}
 <nav>
     <ul>
         <li> <a href ="{% url 'home'%}"> Inicio </a> </li>
         <li> <a href ="{% url 'post:post_detail' slug='solo-es-un-ejemplo'%}"> Ver Publicaciones </a> </li>
         <li> <a href ="{% url 'user:user_profile'%}"> Ver Perfil </a> </li>
+       ## falta implementar esto <li><a href="{% url 'user:auth_register' %}">Registrarse</a></li> 
     </ul>
 </nav>
 
-
-{% comment %}
     esto lo a modo de ejemplo luego modificar , paso un slug de modo ejemplo solamente
 {% endcomment %}
     

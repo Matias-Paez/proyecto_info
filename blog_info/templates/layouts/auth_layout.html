@@ -1,0 +1,28 @@
+{% extends 'layouts/base_layout.html' %} 
+{% block title_layout %} 
+  {% block title %}Chaco Comparte{% endblock title %} 
+{% endblock title_layout %} 
+
+{% block extra_head_layout %} 
+  {% block extra_head %}{% endblock extra_head %} 
+{% endblock extra_head_layout %} 
+
+{% block content_layout %}
+
+    
+    {% include 'includes/commons/header.html' %}  
+
+    <main class="bg-gray-900 text-white min-h-screen flex flex-col justify-center items-center">
+        {% block content %}{% endblock content %}  
+    </main> 
+    
+    {% comment %}incluyo el footer en los templates de auth {% endcomment %}
+    {% include 'includes/commons/footer.html' %}  
+      
+{% endblock content_layout %}
+  
+
+{% comment %}
+<body class="bg-gray-900 text-white min-h-screen flex flex-col justify-center items-center">
+{% endcomment %}
+  

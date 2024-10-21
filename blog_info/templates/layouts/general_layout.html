@@ -2,24 +2,23 @@
 
 {% block title_layout %}
     {% block title %}
-        Informatorio Blog
+        Chaco Comparte
     {% endblock title %}
 {% endblock title_layout %}
 
 
 {% block extra_head_layout %}
+
     {% block extra_head %} {% endblock extra_head %}
 {% endblock extra_head_layout %}
 
 
 {% block content_layout %}
     {% include 'includes/commons/header.html' %}
-    
     <main>
         {% block content %}
             {% comment %}esto es lo que en realidad cambia --- ver bien el manejo luego{% endcomment %}
         {% endblock content %}
-            
     </main>
 
     {% include 'includes/commons/footer.html' %}
