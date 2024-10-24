@@ -1,0 +1,57 @@
+{% extends 'layouts/post_layout.html' %}  
+{% block title %}Nuevo | Chaco Comparte{% endblock title %} 
+{% block content %} 
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Crear Nuevo Post</h1>
+
+    <form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded-lg p-6">
+        {% csrf_token %}
+        
+        <!-- Título -->
+        <div class="mb-4">
+            <label for="id_title" class="block text-gray-700 font-bold mb-2">Título del Post</label>
+            <input type="text" id="id_title" name="title" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Escribe el título aquí" required>
+        </div>
+
+        <!-- Contenido -->
+        <div class="mb-4">
+            <label for="id_content" class="block text-gray-700 font-bold mb-2">Contenido</label>
+            <textarea id="id_content" name="content" rows="6" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Escribe el contenido aquí" required></textarea>
+        </div>
+
+        <!-- Categoría -->
+        <div class="mb-4">
+            <label for="id_category" class="block text-gray-700 font-bold mb-2">Categoría</label>
+            <select id="id_category" name="category" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Permitir Comentarios -->
+        <div class="mb-4">
+            <label for="id_allow_comment" class="block text-gray-700 font-bold mb-2">¿Permitir Comentarios?</label>
+            <input type="checkbox" id="id_allow_comment" name="allow_comment" class="h-5 w-5 text-blue-600">
+        </div>
+
+        <!-- Subir Imágenes -->
+        <div class="mb-4">
+            <label for="id_images" class="block text-gray-700 font-bold mb-2">Subir Imágenes</label>
+            <input type="file" id="id_images" name="images" accept="image/*" multiple class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            <small class="text-gray-500">Puedes seleccionar más de una imagen</small>
+        </div>
+
+        <!-- Botón de Enviar -->
+        <div class="flex items-center justify-between">
+            <button type="button" onclick="history.back()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Regresar
+            </button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Crear Post
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

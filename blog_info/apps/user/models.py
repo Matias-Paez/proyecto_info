@@ -18,11 +18,20 @@ class User(AbstractUser):
     alias = models.CharField(max_length = 35 , blank = True)
     avatar = models.ImageField(upload_to = get_avatar_filename , default= 'user/default/avatar_default.png' )
 
-
-
-
-
-# miembro - colaborador - superuser###
+    #Collaborator- devuelve un booleano
+    @property
+    def is_collaborator(self):
+        return self.groups.filter(name = 'Collaborators').exists()
+    
+    #Registereds 
+    @property
+    def is_registered(self):
+        return self.groups.filter(name = 'Registereds').exists()
+    
+    #Administrators
+    @property
+    def is_administrator(self):
+        return self.groups.filter(name = 'Administrators').exists()
 
 
 

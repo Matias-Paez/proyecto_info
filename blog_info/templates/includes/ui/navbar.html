@@ -1,14 +1,24 @@
 <!-- Navegación -->
 <nav class="space-x-4">
       <a href="{% url 'home'%}" class="text-gray-400 hover:text-white">Inicio</a>
-      <a href="{% url 'post:post_detail' slug='solo-es-un-ejemplo'%}" class="text-gray-400 hover:text-white">Publicaciones Recientes</a>
+      <a href="{% url 'post:post_list'%}" class="text-gray-400 hover:text-white">Publicaciones Recientes</a>
       <a href="#" class="text-gray-400 hover:text-white">Acerca de</a>
+    
+    <!-- si el usuario autenticado es colaborador muetro -->  
+      {% if user.is_collaborator or user.is_administrator %}
+        <a href="{% url 'post:post_create'%}" class="text-gray-400 hover:text-white">Publicar</a>
+      {% endif %}
+      
+    <!-- solo el administrador puede cargar categorias ##TODO: FALTA REALIZAR ESTO COMPLETO##-->
+      {% if user.is_administrator %}
+        <a href="#" class="text-gray-400 hover:text-white">Categorias</a>
+      {% endif %}    
 
       <!-- Si el usuario no está logueado -->
       {% if not user.is_authenticated %}
        <a href="{%url 'user:auth_login'%}" class="text-gray-400 hover:text-white">Iniciar Sesión</a>
        {% else %}
-         <!-- Si el usuario está logueado (ejemplo básico de menú de usuario) -->
+         <!-- Si el usuario está logueado  -->
         <div class="relative inline-block text-left">
             <button class="flex items-center space-x-2 text-gray-400 hover:text-white">
                 <span>Perfil</span>
@@ -18,12 +28,13 @@
             </button>
             <div class="hidden absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-1 z-20">
                 <a href="{%url 'user:user_profile'%}" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">Perfil</a>
-                <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">Configuración</a>
-
+                <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">Configuración</a>    
+                     
                 {% comment %} 
                 Django utiliza el método POST para cerrar sesión.El 
                 {% csrf_token %} se asegura de que Django valide la solicitud. 
                 {% endcomment %}
+                
                 <form method="POST" action="{% url 'user:auth_logout' %}">
                 {% csrf_token %}
                     <button type="submit" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">

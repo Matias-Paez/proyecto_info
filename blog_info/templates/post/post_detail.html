@@ -1,5 +1,112 @@
-{% extends 'layouts/general_layout.html' %}
+{% extends 'layouts/post_layout.html' %}
 
-{% block title %} Detalles | Chaco Comparte {% endblock title %}
+{% block title %} Pots | Chaco Comparte {% endblock title %}
 
-{% block content %} <h1>estoy en post detalles</h1> {% endblock content %}
+    
+{% block content %} 
+<div class="container mx-auto p-6">
+    <!-- Título del Post -->
+    <h1 class="text-4xl font-bold text-center mb-4">{{ post.title }}</h1>
+    
+     <!-- Información del post -->
+    <div class="flex justify-start mb-2 text-gray-600">
+        <span class="mr-4">Publicado por <span class="font-medium">{{ post.author }}</span></span>
+        <span>Categoría: <span class="font-medium">{{ post.category.title }}</span></span>
+    </div>
+
+    <!-- Carrusel de imágenes con tamaño fijo post.imagepost_set.all -->
+    <div class="relative mb-6 overflow-hidden rounded-lg shadow-lg h-64">
+        <div class="carousel-images w-full h-full flex transition-transform duration-500 ease-in-out ">
+            {% for image in post.images.all %}
+            <img src="{{ image.image.url }}"  alt = "{{post.title}}"  class="w-full h-full object-cover flex-shrink-0">
+                 
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Contenido del Post -->
+    <div class="prose max-w-none mx-auto mb-8 max-h-96 overflow-auto whitespace-normal break-words p-4 border border-gray-200 rounded-lg shadow-lg">
+        {{ post.content|linebreaksbr }}
+    </div>
+    
+    <!-- Botones de administración solo para el autor o administradores) -->
+    {% if user.is_authenticated %}
+        {% if user == post.author or user.is_administrator %}
+            <div class="flex justify-end space-x-4 mb-8">
+                <a href="{% url 'post:post_update' slug=post.slug %}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 transition">Editar</a>
+    
+                <!-- AQUI HAGO EL DELETE DE UN POST - PERO SOLO TIENEN ACCESO LOS AUTORES O ADMINISTRADORES -->
+                <form method="POST" action="{% url 'post:post_delete' slug=post.slug %}" onsubmit="return confirmDeletePost('{{ post.title }}')">
+                 {% csrf_token %}
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+                    Eliminar Post
+                    </button>
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    
+</div>
+    <!-- Comentarios  queda por modificar esto - si el post permite comentarios muestro los comentarios o algo alternativo si no hay-->
+    {% if post.allow_comment %}
+    <div class="bg-gray-100 p-6 rounded-lg shadow-md mb-10">
+        <h2 class="text-2xl font-semibold mb-4">Comentarios</h2>
+        
+        <!-- Listado de comentarios -->
+        {% if post.comments.all %}
+        <div class="space-y-6">
+            {% for comment in post.comments.all %}
+            <div class="bg-white p-4 rounded-lg shadow">
+                <p class="font-medium">{{ comment.user.username }}</p>
+                <p class="text-sm text-gray-600 mb-2">{{ comment.created_at|date:"d M Y, H:i" }}</p>
+                <p class="text-gray-800">{{ comment.content }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-600">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+        {% endif %}
+    </div>
+
+    <!-- Panel para añadir un comentario (solo si el usuario está autenticado) -->
+    {% if user.is_authenticated %}
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4">Añadir un comentario</h3>
+        <form action="#" method="POST">
+            {% csrf_token %}
+            <textarea name="content" rows="4" class="w-full p-4 border border-gray-300 rounded-lg mb-4" placeholder="Escribe tu comentario..."></textarea>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 transition">Publicar comentario</button>
+        </form>
+    </div>
+    {% else %}
+    <p class="text-gray-600">Debes <a href="{% url 'user:auth_login'  %}" class="text-blue-500 hover:text-blue-700">iniciar sesión</a> para poder comentar.</p>
+    {% endif %}
+    {% endif %}
+</div>
+
+<script>
+    // JavaScript para el carrusel de imágenes
+    document.addEventListener('DOMContentLoaded', function() {
+        const carouselImages = document.querySelector('.carousel-images');
+        const images = carouselImages.children;
+        const totalImages = images.length;
+        let currentIndex = 0;
+
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % totalImages; // Cicla por las imágenes
+            const offset = -currentIndex * 100;
+            carouselImages.style.transform = `translateX(${offset}%)`; // Mueve el contenedor
+        }, 5000); // Cambia cada 5 segundos
+    });
+</script>
+    
+    <!-- script para mostrar el mensaje y capturar la confirmacion de eliminar un post -->
+<script>
+    function confirmDeletePost(postTitle) {
+        return confirm(`¿Está seguro que desea eliminar el post "${postTitle}"? Tenga en cuenta que también se eliminarán los comentarios e imágenes asociados.`);
+    }
+</script>
+
+
+{% endblock content %}

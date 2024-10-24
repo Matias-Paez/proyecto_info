@@ -13,12 +13,15 @@ class Category (models.Model):
     title = models.CharField(max_length= 60)
     description = models.TextField(max_length=120)
 
+    def __str__(self) :
+        return self.title
+
 #Modelo de Post
 class Post (models.Model):
     #defino los campos de mis post
     id = models.UUIDField(primary_key=True, default= uuid.uuid4, editable= False)
-    title = models.CharField(max_length=120)
-    slug = models.SlugField(unique= True, max_length = 130) # el slug para que me lleve a un post e particular
+    title = models.CharField(max_length=250)
+    slug = models.SlugField(unique= True, max_length = 300) # el slug para que me lleve a un post e particular
     content = models.TextField(max_length=5000) # maximo tamaño del texto
     #relacion con el autor/colaborador
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete= models.CASCADE) #CASCADE Elimina todos los post asociados al usuario
@@ -50,8 +53,8 @@ class Post (models.Model):
         ## esta parte no se si queda -- ver luego ##
         ''' ver luego esta parte TODO:'''
         if not self.images.exists():
-            PostImage.objects.create(post.self, image = 'post/default/post_default.png')
-
+            PostImage.objects.create( post=self, image = 'post/default/post_default.png') #asi estaba  post.self
+   
     def generate_unique_slug(self):
         slug = slugify(self.title) #le pasamos lo que tiene que hacer
         unique_slug = slug
@@ -75,7 +78,8 @@ def get_image_filename(instance, filename):
 #Modelo de imagen - relacion de 1 a n con post (un post tiene 1 o muchas imagnes)
 class PostImage(models.Model): 
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images') 
-    image = models.ImageField(upload_to=get_image_filename, default='post/default/post_default.png') 
+    #image = models.ImageField(upload_to=get_image_filename, default='post/default/post_default.png') 
+    image = models.ImageField(upload_to=get_image_filename,null= True , blank=True) 
     active = models.BooleanField(default=True)
     create_date = models.DateTimeField(default=timezone.now)
 

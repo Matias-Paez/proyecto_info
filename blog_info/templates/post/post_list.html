@@ -1,0 +1,108 @@
+{% extends 'layouts/post_layout.html' %} 
+{% block title %} Publicaciones | Chaco comparte{% endblock title %} 
+
+{% block content %} 
+
+<div class="container mx-auto p-6">
+<h1 class="text-4xl font-bold text-center mb-10">Blogs</h1>
+
+    <!-- Formulario para filtros -->
+    <form method="GET" class="mb-8 flex flex-col md:flex-row gap-4 justify-center">
+        <!-- Filtro por título -->
+        <input
+            type="text"
+            name="title"
+            placeholder="Buscar por título"
+            class="w-full md:w-1/3 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value="{{ request.GET.title }}"
+        >
+
+        <!-- Filtro por categoría -->
+        <select
+            name="category"
+            class="w-full md:w-1/3 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+            <option value="">Todas las categorías</option>
+            {% for category in categories %}
+            <!-- Mantén todas las categorías visibles y marca la seleccionada -->
+            <option value="{{ category.id }}" {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                {{ category.title }}
+            </option>
+            {% endfor %}
+        
+        </select>
+        <!-- Botón para aplicar filtros -->
+        <button
+            type="submit"
+            class="w-full md:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300"
+        >
+            Filtrar
+        </button>
+    </form>
+
+    <!-- condicional para determinar si tengo posteos, si tengo muestro sino , muestro un mensaje y acomodo un poco la vista-->
+    {% if posts %}
+        
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Iterar sobre los posts -->
+        {% for post in posts %}
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+            <div class="relative">
+                <!-- Obtengo la primer imagen asociada al post-m related_name='images' -- asi esta en el modelo por eso post.images
+                obtengo de formo indirecta la imagen por first.image-->
+                 
+                <img src="{{post.images.first.image.url}}" alt="{{ post.title }}" class="w-full h-48 object-cover">
+                <div class="absolute top-2 left-2 bg-blue-600 text-white px-3 py-1 rounded-full text-xs">
+                    {{ post.category.title }}
+                </div>
+            </div>
+
+            <div class="px-6 py-4">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-2 hover:text-blue-600 transition-colors duration-300">
+                    <a href="{% url 'post:post_detail' slug=post.slug %}">{{ post.title }}</a>
+                </h2>
+
+                <p class="text-gray-600 mb-4">
+                    {{ post.creation_date|date:"d M Y" }} por <span class="font-medium">{{ post.author }}</span>
+                </p>
+
+                <p class="text-gray-700 mb-4">
+                    {{ post.excerpt|truncatewords:20 }}
+                </p>
+
+                <div class="flex items-center justify-between">
+                    <div class="text-gray-600 text-sm">
+                        <span class="font-medium">Comentarios:</span> {{ post.amount_comments }}
+                    </div>
+                    <div class="text-gray-600 text-sm">
+                        {% if post.allow_comment %}
+                        <span class="font-medium text-green-500">Permite comentarios</span>
+                        {% else %}
+                        <span class="font-medium text-red-500">No permite comentarios</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 bg-gray-50 flex justify-between items-center">
+                <a href="{% url 'post:post_detail' slug=post.slug %}" class="text-blue-600 hover:text-blue-800 font-medium">
+                    Leer más →
+                </a>
+                <div class="text-sm text-gray-500">
+                    #{{ post.category.title }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Mensaje si no hay publicaciones -->
+    <div class="text-center py-20">
+        <h2 class="text-2xl font-semibold text-gray-700">No hay publicaciones recientes</h2>
+        <p class="text-gray-500 mt-4">Vuelve más tarde para ver las novedades.</p>
+    </div>
+    {% endif %}
+</div>
+
+
+{% endblock content %}

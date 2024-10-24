@@ -1,7 +1,72 @@
-{% extends 'layouts/general_layout.html' %}
+{% extends 'layouts/post_layout.html' %} 
 
-{% block title %} Nuevo Blogs | Chaco Comparte {% endblock title %}
+{% block title %}ACTUALIZAR | Chaco Comparte{% endblock title %} 
 
-{% block content %} <h1> Hola estoy en el post update</h1> {% endblock content %}
+{% block content %} 
 
+<form method="POST" enctype="multipart/form-data" class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    {% csrf_token %}
+    <h2 class="text-2xl font-semibold mb-6">Actualizar Post</h2>
 
+    <!-- Título del post -->
+    <div class="mb-4">
+        <label for="id_title" class="block text-gray-700 font-bold mb-2">Título</label>
+        <input type="text" name="title" value="{{ form.title.value }}" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300">
+    </div>
+
+   <!-- Categoría del post -->
+    <div class="mb-4">
+        <label for="id_category" class="block text-gray-700 font-bold mb-2">Categoría</label>
+        <select name="category" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300">
+            {% for category in form.category.field.queryset %}
+                <option value="{{ category.id }}" {% if form.category.value == category.id %}selected{% endif %}>{{ category.title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="mb-4">
+        <label for="id_content" class="block text-gray-700 font-bold mb-2">Contenido</label>
+        <textarea name="content" rows="6" class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300">{{ form.content.value }}</textarea>
+    </div>
+
+    <!-- Permitir comentarios -->
+    <div class="mb-4">
+        <label for="id_allow_comment" class="block text-gray-700 font-bold mb-2">¿Permitir comentarios?</label>
+        <input type="checkbox" name="allow_comment" class="mr-2" {% if form.allow_comment.value %}checked{% endif %}>
+        Permitir comentarios
+    </div>
+
+    <!-- Imágenes ya asociadas al post -->
+    <!-- Imágenes ya asociadas al post -->
+    <div class="mb-4">
+        <h4 class="text-lg font-semibold mb-4">Imágenes asociadas</h4>
+        <div class="grid grid-cols-2 gap-4">
+            {% for image in active_images %}
+                <div class="border p-2 rounded-lg">
+                    <img src="{{ image.image.url }}" alt="Imagen asociada" class="w-full h-32 object-cover rounded-lg mb-2">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="keep_image_{{image.id}}" id="keep_image_{{ active_img.id }} class="mr-2" {% if image.active %}checked{% endif %}>
+                        <span class="text-sm">Activa</span>
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- Cargar nuevas imágenes -->
+    <div class="mb-4">
+        <label for="id_images" class="block text-gray-700 font-bold mb-2">Subir nuevas imágenes</label>
+        <input type="file" name="images" multiple class="w-full p-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-300">
+    </div>
+
+    <!-- Botones para actualizar o cancelar -->
+    <div class="flex justify-between">
+        <a href="{% url 'post:post_detail' slug=object.slug %}" class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded">
+            Cancelar
+        </a>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            Actualizar Post
+        </button>
+    </div>
+</form>
+
+{% endblock content %}
