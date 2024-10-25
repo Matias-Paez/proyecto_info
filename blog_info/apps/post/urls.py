@@ -10,5 +10,7 @@ urlpatterns = [
     path('posts/<slug:slug>/delete', views.PostDeleteView.as_view(), name= 'post_delete'),#URL :Para Delete Post
     path('posts/', views.PostListView.as_view(), name ='post_list'), # URL :Para listar los post
     path('category/', views.CategoryListView.as_view(), name = 'category_list'), # URL para listar las categorias
-    path('category/create', views.CategoryCreateView.as_view(), name = 'category_create'), # URL para listar las categorias
+    path('category/create', views.CategoryCreateView.as_view(), name = 'category_create'), # URL para crear una categorias
+    path('category/update/<uuid:pk>/', views.CategoryUpdateView.as_view(), name = 'category_update'), # URL para actualizar una categorias -- le paso el id de la categoria
+    path('category/delete/<uuid:pk>/', views.CategoryDeleteView.as_view(), name = 'category_delete'), # URL para actualizar una categorias -- le paso el id de la categoria
 ]

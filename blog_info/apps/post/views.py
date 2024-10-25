@@ -4,10 +4,11 @@ from django.http import HttpResponse
 from django.views.generic import ListView , CreateView, DetailView , DeleteView , UpdateView
 from django.urls import reverse , reverse_lazy
 from django.conf import settings
+from django.contrib import messages
 
 from apps.post.models import Post , PostImage, Category # importo el modelo y el form
-from apps.post.forms import NewPostForm, UpdatePostForm , NewCategoryForm
-# Create your views here. aca se crean las views , las vistas
+from apps.post.forms import NewPostForm, UpdatePostForm , NewCategoryForm, UpdateCategoryForm
+
 
 #Vista para ver el post
 class PostDetailView(DetailView):
@@ -147,9 +148,36 @@ class CategoryCreateView(CreateView):
     success_url = reverse_lazy('post:category_list')
 
     def form_valid(self, form):
-
+        messages.success(self.request, "La categoría ha sido creada con éxito.")
         return super().form_valid(form)
 
 #Vista para Actualizar categoria
-class CategoryUpdateView():
-    pass
+class CategoryUpdateView(UpdateView):
+    model = Category
+    form_class = UpdateCategoryForm
+    template_name = 'category/category_update.html'
+    success_url = reverse_lazy('post:category_list')  # URL a la que redirigir después de una actualización
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Actualizar Categoría'
+        return context
+    
+    def form_valid(self , form):
+        messages.success(self.request, "La categoría ha sido actualizada con éxito.")
+        return super().form_valid(form)
+
+
+    
+#Vista para eliminar Categoria-- se hace desde categori_detail- sin un form - lo mismo que post delete
+class CategoryDeleteView(DeleteView):
+    model = Category     
+    success_message = "La categoría ha sido eliminada con éxito."
+    success_url = reverse_lazy('post:category_list')  # URL a la que redirigir después de una actualización
+
+    def delete(self, request, *args, **kwargs):
+        # Establecer el mensaje
+        messages.success(request, "La categoría ha sido eliminada con éxito.")
+        # Usar la llamada al super() con return directamente
+        return super().delete(request, *args, **kwargs)
+    

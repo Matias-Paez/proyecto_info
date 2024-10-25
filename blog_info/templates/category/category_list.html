@@ -2,10 +2,20 @@
 {% block title %}Categorias | Chaco Comparte{% endblock title %} 
 {% load static %}
 
-
-{% comment %} cargo los archivos staticos en la plantilla mt-4{% endcomment %}
+{% comment %} cargo los archivos staticos en la plantilla{% endcomment %}
     
 {% block content %} 
+    <!-- Mensajes para informar si se actualizo / creo  o elimino una categoria -->
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-2" role="alert">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <div class="flex justify-between items-center mb-6 mt-4">
         <h2 class="text-2xl font-semibold">Administrar Categorías</h2>
         <a href="{%url 'post:category_create'%}" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md flex items-center">
@@ -30,30 +40,21 @@
                             <td class="px-6 py-4 text-sm">{{ category.title }}</td>
                             <td class="px-6 py-4 text-sm">{{ category.description|truncatewords:10 }}</td>
                             <td class="px-6 py-4 text-center flex justify-center space-x-4">
-                                <!-- Ver detalles -->
+                                <!-- Boton ver detalles -->
                                 <button onclick="openModal('{{ category.title }}', '{{ category.description }}')" class="text-blue-500 hover:text-blue-700">
                                     <img src="{% static 'icons/view.png'%}" alt="Ver" class="w-6 h-6">
                                 </button>
 
-                                <!-- Editar -->
-                                <a href="{}" class="text-yellow-500 hover:text-yellow-700">
+                                <!-- Boton Editar -->
+                                <a href="{%url 'post:category_update' category.id %}" class="text-yellow-500 hover:text-yellow-700">
                                     <img src="{%static 'icons/edit.png'%}" alt="Editar" class="w-6 h-6">
                                 </a>
 
-                                <!-- Eliminar category.id  url 'post:category_list' category.id -->
-                                <!-- Eliminar -->
-                                <button onclick="openDeleteModal('{{ category.title }}', '{}')" class="text-red-500 hover:text-red-700">
+                                <!-- Boton Eliminar -->
+                                <button onclick="openDeleteModal('{{ category.title }}', '{%url 'post:category_delete' category.id%}')" class="text-red-500 hover:text-red-700">
                                     <img src="{%static 'icons/delete.png'%}" alt="Eliminar" class="w-6 h-6">
                                 </button>
                                 
-                                {% comment %}
-                                <form action="" method="POST" class="inline-block" onsubmit="return confirm('¿Está seguro que desea eliminar la categoría {{ category.title }}? Esto también eliminará todos los posts asociados.')">
-                                    {% csrf_token %}
-                                    <button type="submit" class="text-red-500 hover:text-red-700">
-                                        <img src="{%static 'icons/delete.png'%}" alt="Eliminar" class="w-6 h-6">
-                                    </button>
-                                </form>
-                                {% endcomment %}
                             </td>
                         </tr>
                     {% endfor %}
@@ -75,9 +76,7 @@
             <button onclick="closeModal()" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mx-auto block">Cerrar</button>
         </div>
     </div>
-    {% comment %}
-        
-    {% endcomment %}
+    
     <!-- Modal de confirmación de eliminación -->
     <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex justify-center items-center">
         <div class="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -85,7 +84,10 @@
             <p id="deleteModalMessage" class="text-gray-700 mb-6"></p>
             <div class="flex justify-between">
                 <button onclick="closeDeleteModal()" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md">Cancelar</button>
-                <a id="confirmDeleteLink" href="#" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md">Eliminar</a>
+                <form id="confirmDeleteForm" action="" method="POST" class="inline-block">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md">Eliminar</button>
+                </form>
             </div>
         </div>
     </div>
@@ -104,7 +106,7 @@
 
     function openDeleteModal(title, deleteUrl) {
         document.getElementById('deleteModalMessage').innerText = `¿Está seguro que desea eliminar la categoría "${title}"?.`;
-        document.getElementById('confirmDeleteLink').setAttribute('href', deleteUrl);
+        document.getElementById('confirmDeleteForm').setAttribute('action', deleteUrl);
         document.getElementById('deleteModal').classList.remove('hidden');
     }
 
