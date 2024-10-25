@@ -7,7 +7,7 @@ Chaco Comparte es un blog diseñado para compartir contenido relevante sobre la 
 - **Gestión de usuarios**: Los usuarios pueden registrarse, iniciar sesión.
 - **Publicaciones de blog**: Los administradores/colaboradores pueden crear, editar y eliminar publicaciones.
 - **Comentarios**: Los usuarios pueden comentar en las publicaciones y los autores pueden editar o eliminar sus comentarios.
-- **Categorías**: Las publicaciones pueden ser categorizadas para facilitar la navegación.
+- **Categorías**: Las publicaciones pueden ser categorizadas para facilitar la navegación. Los administradores son los encargados de Crear, Modificar y Eliminar las categorias.
 - **Interfaz responsiva**: Diseño adaptado para dispositivos móviles usando TailwindCSS.
 
 ## Tecnologías
