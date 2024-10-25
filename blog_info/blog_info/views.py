@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView 
+from django.views.generic import TemplateView
 from apps.post.models import Post # importo el modelo de post
 
 class IndexView(TemplateView):
@@ -9,3 +9,7 @@ class IndexView(TemplateView):
         # Obtenemos todos los posts, ordenados por fecha de creación y solo envio los tres primeros
         context['posts'] = Post.objects.all().order_by('-creation_date')[:3]
         return context
+
+
+class ContactView(TemplateView):
+    template_name = 'contact.html'

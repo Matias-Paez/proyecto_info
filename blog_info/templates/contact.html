@@ -1,0 +1,50 @@
+{% extends 'layouts/general_layout.html' %}
+{% block title %} Acerca De | Chaco Comparte {% endblock title %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
+    <h2 class="text-3xl font-bold mb-6 text-center">Acerca de Mí</h2>
+    <p class="text-gray-700 mb-4">
+        ¡Hola! Soy Matías Adrián Paez, un estudiante de Ingeniería en Sistemas de la ciudad de 
+        Presidencia Roque Sáenz Peña, Chaco. Me apasiona la programación y mi objetivo es convertirme 
+        en ingeniero en el futuro. Este blog es parte de un curso que estoy realizando, y es el 
+        proyecto que presentaré para la entrega del certificado.
+    </p>
+    <p class="text-gray-700 mb-4">
+        Aquí comparto mis aprendizajes, proyectos y reflexiones sobre el mundo de la tecnología y la 
+        programación. Espero que encuentres información útil y que te inspire en tu propio camino.
+    </p>
+
+    
+    {% comment %}
+        Esto es solo a modo de ejemplo
+    {% endcomment %}
+        
+    <h3 class="text-2xl font-semibold mt-8 mb-4">Contáctame</h3>
+    <form action="" class="bg-gray-100 p-4 rounded-lg shadow">
+        <div class="mb-4">
+            <label for="name" class="block text-sm font-medium text-gray-700">Nombre</label>
+            <input type="text" name="name" id="name" required 
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-300">
+        </div>
+
+        <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" name="email" id="email" required 
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-300">
+        </div>
+
+        <div class="mb-4">
+            <label for="message" class="block text-sm font-medium text-gray-700">Mensaje</label>
+            <textarea name="message" id="message" rows="4" required 
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring focus:ring-blue-300"></textarea>
+        </div>
+
+        <button type="submit" 
+            class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md">
+            Enviar Mensaje
+        </button>
+    </form>
+</div>
+{% endblock %}
+
