@@ -1,0 +1,19 @@
+<!-- post/comment_update.html -->
+{% extends 'layouts/category_layout.html' %}  
+{% block title %} Editar Comentario | Chaco Comparte{% endblock title %} 
+    
+{% block content %}
+<div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-semibold mb-4">Actualizar Comentario</h2>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <textarea name="content" rows="4" class="w-full p-4 border border-gray-300 rounded-lg mb-4" placeholder="Edita tu comentario...">{{ form.content.value }}</textarea>
+        
+        <div class="flex justify-between">
+            <a href="{% url 'post:post_detail' comment.post.slug %}" class="text-gray-500 hover:underline">Regresar</a>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-800 transition">Actualizar Comentario</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

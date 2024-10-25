@@ -1,13 +1,63 @@
 #from django.shortcuts import render
 from django.forms import BaseModelForm
-from django.http import HttpResponse
-from django.views.generic import ListView , CreateView, DetailView , DeleteView , UpdateView
+from django.http import HttpResponse , HttpResponseForbidden
+from django.views.generic import ListView , CreateView, DetailView , DeleteView , UpdateView , View
 from django.urls import reverse , reverse_lazy
 from django.conf import settings
 from django.contrib import messages
+from django.shortcuts import get_object_or_404 , redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin 
 
-from apps.post.models import Post , PostImage, Category # importo el modelo y el form
-from apps.post.forms import NewPostForm, UpdatePostForm , NewCategoryForm, UpdateCategoryForm
+from apps.post.models import Post , PostImage, Category , Comment# importo el modelo y el form
+from apps.post.forms import NewPostForm, UpdatePostForm , NewCategoryForm, UpdateCategoryForm , CommentForm
+
+#Vistas para comentarios
+#Nuevo comentarios
+class CommentCreateView(CreateView): 
+    model = Comment 
+    form_class = CommentForm 
+    template_name = 'post/post_detail.html' 
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user 
+        form.instance.post = Post.objects.get(slug=self.kwargs['slug']) 
+
+        return super().form_valid(form) 
+    
+    def get_success_url(self): 
+        return reverse_lazy('post:post_detail', kwargs={'slug':self.object.post.slug}) 
+#Editar un comentario
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView): 
+    model = Comment 
+    fields = ['content']
+    template_name = 'comment/comment_update.html' 
+
+    def test_func(self):
+        # Solo el autor puede actualizar el comentario
+        comment = self.get_object()
+        return self.request.user == comment.author
+    
+    def get_success_url(self): 
+        return reverse_lazy('post:post_detail', kwargs={'slug': self.object.post.slug}) 
+    
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+     
+# Eliminar un comentario
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author or self.request.user.is_superuser
+
+    def get_object(self):
+        comment_id = self.kwargs.get('pk')
+        return get_object_or_404(Comment, id=comment_id)
+
+    def post(self, request, *args, **kwargs):
+        comment = self.get_object()
+        comment.delete()
+        return redirect('post:post_detail', slug=comment.post.slug)  # Redirige al post después de eliminar
 
 
 #Vista para ver el post
@@ -20,7 +70,8 @@ class PostDetailView(DetailView):
         context = super().get_context_data(**kwargs) 
         #Obtener todas las imágenes activas del post 
         active_images = self.object.images.filter(active=True) # Solo las que estan en True
-        context['active_images'] = active_images 
+        context['active_images'] = active_images
+
         return context 
 
 #Vista para actualizar el post

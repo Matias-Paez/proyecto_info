@@ -3,7 +3,13 @@ from django import forms
 from django.core.files.base import File
 from django.db.models.base import Model
 from django.forms.utils import ErrorList 
-from apps.post.models import Post, PostImage , Category
+from apps.post.models import Post, PostImage , Category , Comment
+
+#Formularios para comentarios
+class CommentForm(forms.ModelForm): 
+    class Meta:
+        model = Comment 
+        fields = ['content']
 
 
 class PostForm(forms.ModelForm): 
