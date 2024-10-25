@@ -1,2 +1,0 @@
-aqui en static debo tener alguna carpeta css y creat los styles.css
-tambien tengo las carpetas de js . con los javascripts

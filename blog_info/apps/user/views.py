@@ -1,14 +1,16 @@
 #from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, UpdateView
 from django.contrib.auth.views import LoginView as LoginViewDjango , LogoutView as LogoutViewDjango
+from django.contrib.auth import authenticate , login
 from django.contrib.auth.models import Group
 from django.urls import reverse_lazy
-
-# pueba
-from django.contrib.auth import authenticate , login
 from django.shortcuts import redirect
+# pueba
 
 from apps.user.forms import RegisterForm , LoginForm
+
+#PARa el update
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here. aca se crean las views , las vistas
 
@@ -45,10 +47,8 @@ class LoginView (LoginViewDjango):
     template_name = 'auth/auth_login.html'
     authentication_form = LoginForm
 
-    def get_success_url(self):
-        return reverse_lazy('home')
-    
-
+    def get_success_url(self): 
+        return reverse_lazy('home') 
 
 class LogoutView(LogoutViewDjango):
     next_page = reverse_lazy('home')

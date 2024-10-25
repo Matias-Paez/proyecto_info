@@ -17,9 +17,10 @@
             <!-- Carta de post -->
             {% for post in posts %}
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                <img src="{{ post.images.first.image.url }}" alt="{{ post.title }}" class="h-48 w-full object-cover">
+                <img src="{{post.images.first.image.url}}" alt="{{ post.title }}" class="w-full h-48 object-cover">
+                
                 <div class="p-6">
-                    <h3 class="text-xl font-bold mb-2">{{ post.title }}</h3>
+                    <h3 class="text-xl font-bold mb-2 hover:text-blue-600 transition-colors duration-300"> <a href="{% url 'post:post_detail' slug=post.slug %}">{{ post.title }}</a> </h3>
                     <p class="text-gray-600 mb-4">{{ post.category.title }} - Publicado por {{ post.author.username }} el {{ post.creation_date|date:"d M Y" }}</p>
                     <p class="text-gray-700">{{ post.content|truncatewords:20 }}</p>
                     <a href="{% url 'post:post_detail' post.slug %}" class="text-blue-500 mt-4 inline-block">Leer más</a>

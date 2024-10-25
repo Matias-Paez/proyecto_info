@@ -14,7 +14,7 @@
         <a href="{%url 'post:category_list'%}" class="text-gray-400 hover:text-white">Categorias</a>
       {% endif %}    
 
-      <!-- Si el usuario no está logueado -->
+      <!-- Si el usuario no está logueado {% url 'user:auth_login' %}?next={{ request.path }} -->
       {% if not user.is_authenticated %}
        <a href="{%url 'user:auth_login'%}" class="text-gray-400 hover:text-white">Iniciar Sesión</a>
        {% else %}
@@ -29,11 +29,6 @@
             <div class="hidden absolute right-0 mt-2 w-48 bg-gray-700 rounded-md shadow-lg py-1 z-20">
                 <a href="{%url 'user:user_profile'%}" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">Perfil</a>
                 <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:text-white">Configuración</a>    
-                     
-                {% comment %} 
-                Django utiliza el método POST para cerrar sesión.El 
-                {% csrf_token %} se asegura de que Django valide la solicitud. 
-                {% endcomment %}
                 
                 <form method="POST" action="{% url 'user:auth_logout' %}">
                 {% csrf_token %}
@@ -53,17 +48,4 @@
             });
         </script>
 </nav>
-      
-{% comment %}
-<nav>
-    <ul>
-        <li> <a href ="{% url 'home'%}"> Inicio </a> </li>
-        <li> <a href ="{% url 'post:post_detail' slug='solo-es-un-ejemplo'%}"> Ver Publicaciones </a> </li>
-        <li> <a href ="{% url 'user:user_profile'%}"> Ver Perfil </a> </li>
-       ## falta implementar esto <li><a href="{% url 'user:auth_register' %}">Registrarse</a></li> 
-    </ul>
-</nav>
-
-    esto lo a modo de ejemplo luego modificar , paso un slug de modo ejemplo solamente
-{% endcomment %}
-    
+ 

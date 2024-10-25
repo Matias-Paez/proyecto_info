@@ -1,2 +1,0 @@
-la idea de esta carpeta es definir templetes y reutilizarlos o componente mejor dicho
-como una barra de navegacion nav, footer , header , etc, tal vez algun formulario

@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 from django.conf import settings
-from blog_info.views import IndexView, ContactView
+from blog_info.views import IndexView, ContactView, error_403 , error_404, error_500
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +27,11 @@ urlpatterns = [
     path('', include('apps.post.urls')),
     path('',include('apps.user.urls')),
 ]
+# Manejadores de errores 
+handler403 = error_403
+handler404 = error_404
+handler500 = error_500
+# Los manejadores estan disponibles en cualquier parte de la aplicación,
 
 if settings.DEBUG:
     from django.conf.urls.static import static

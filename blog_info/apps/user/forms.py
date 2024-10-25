@@ -5,6 +5,8 @@ from django.contrib.auth.forms import UserCreationForm , AuthenticationForm
 from apps.user.models import User 
 
 # creo aqui los formularios -- aqui van a ir todos los formularios --CRUD
+#Formulario de Update
+
 # Formulario para resgistro de un usuario
 class RegisterForm(UserCreationForm): #UserCreationForm 
     class Meta: 
@@ -48,8 +50,6 @@ class RegisterForm(UserCreationForm): #UserCreationForm
                               widget=forms.FileInput(attrs={   
                                   'class': 'mt-1 text-gray-400',}))
     
-
-       
 # Formulario para el login /autenticarse
 class LoginForm (AuthenticationForm):
     username = forms.CharField( 
