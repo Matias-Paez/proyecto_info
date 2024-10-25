@@ -11,7 +11,7 @@
       
     <!-- solo el administrador puede cargar categorias ##TODO: FALTA REALIZAR ESTO COMPLETO##-->
       {% if user.is_administrator %}
-        <a href="#" class="text-gray-400 hover:text-white">Categorias</a>
+        <a href="{%url 'post:category_list'%}" class="text-gray-400 hover:text-white">Categorias</a>
       {% endif %}    
 
       <!-- Si el usuario no está logueado -->

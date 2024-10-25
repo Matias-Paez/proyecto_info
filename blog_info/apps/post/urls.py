@@ -9,4 +9,6 @@ urlpatterns = [
     path('posts/<slug:slug>/update', views.PostUpdateView.as_view(), name = 'post_update'), #URL :Para Update Post
     path('posts/<slug:slug>/delete', views.PostDeleteView.as_view(), name= 'post_delete'),#URL :Para Delete Post
     path('posts/', views.PostListView.as_view(), name ='post_list'), # URL :Para listar los post
+    path('category/', views.CategoryListView.as_view(), name = 'category_list'), # URL para listar las categorias
+    path('category/create', views.CategoryCreateView.as_view(), name = 'category_create'), # URL para listar las categorias
 ]

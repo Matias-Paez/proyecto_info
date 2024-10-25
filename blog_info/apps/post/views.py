@@ -6,11 +6,11 @@ from django.urls import reverse , reverse_lazy
 from django.conf import settings
 
 from apps.post.models import Post , PostImage, Category # importo el modelo y el form
-from apps.post.forms import NewPostForm, UpdatePostForm
+from apps.post.forms import NewPostForm, UpdatePostForm , NewCategoryForm
 # Create your views here. aca se crean las views , las vistas
 
 #Vista para ver el post
-class PostDetailView (DetailView):
+class PostDetailView(DetailView):
     template_name = 'post/post_detail.html'
     model = Post
     context_object_name = 'post'
@@ -130,3 +130,26 @@ class PostCreateView(CreateView):
     def get_success_url(self):
         return reverse('post:post_detail', kwargs= {'slug': self.object.slug}) #Me dirijo al posteo mediante el slug
 
+
+#VISTAS PARA CATEGORIAS
+#Vista Para ver categorias
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'category/category_list.html'
+    context_object_name ='categories'
+    
+
+#Vista para crear categoria 
+class CategoryCreateView(CreateView):
+    model= Category
+    template_name= 'category/category_create.html'
+    form_class = NewCategoryForm
+    success_url = reverse_lazy('post:category_list')
+
+    def form_valid(self, form):
+
+        return super().form_valid(form)
+
+#Vista para Actualizar categoria
+class CategoryUpdateView():
+    pass

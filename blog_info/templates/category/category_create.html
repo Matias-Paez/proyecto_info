@@ -1,0 +1,31 @@
+{% extends 'layouts/category_layout.html' %}  
+{% block title %} Nueva Categoria | Chaco Comparte{% endblock title %} 
+    
+{% block content %} 
+ <div class="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
+    <h2 class="text-2xl font-semibold mb-6 text-center">Crear Nueva Categoría</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="title" class="block text-sm font-medium text-gray-700">Título</label>
+            <input type="text" name="title" id="title" required
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 p-2">
+        </div>
+        
+        <div class="mb-4">
+            <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
+            <textarea name="description" id="description" rows="4" required
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300 p-2"></textarea>
+        </div>
+
+        <div class="flex justify-between">
+            <a href="{% url 'post:category_list' %}" class="text-gray-500 hover:text-gray-700">Regresar</a>
+            <button type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">
+                Crear Categoría
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

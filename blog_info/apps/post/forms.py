@@ -3,7 +3,7 @@ from django import forms
 from django.core.files.base import File
 from django.db.models.base import Model
 from django.forms.utils import ErrorList 
-from apps.post.models import Post, PostImage 
+from apps.post.models import Post, PostImage , Category
 
 
 class PostForm(forms.ModelForm): 
@@ -47,31 +47,21 @@ class UpdatePostForm(PostForm):
 
         return post
 
-"""
-#dejo esto si no anda
-class UpdatePostForm(PostForm): 
-    image = forms.ImageField(required = False)
-    
-    def __init__(self, *args, **kwargs): # Obtenemos las imagenes activas del form
-         self.active_images =  kwargs.pop('active_images' , None)
-         super(UpdatePostForm, self).__init__(*args, **kwargs)
+#Formulario Para las Categorias
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('title' , 'description')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-input mt-1 block w-full'}),
+            'description': forms.Textarea(attrs={'class': 'form-textarea mt-1 block w-full'}),
+        }
 
-         if self.active_images:
-              for image in self.active_images:
-                   field_name = f"keep_image_{image.id}"
-                   self.fields[field_name]= forms.BooleanField( required= False, initial= True , label= f"Mantener {image}")
-    
-    def save(self, commit=True): 
-        post = super().save(commit=False) 
-        
-        if commit: 
-            post.save() 
-            if self.cleaned_data['image']:  # Si el usuario sube una nueva imagen 
-                PostImage.objects.create(post=post, image=self.cleaned_data['image']) 
+#Nueva Categoria
+class NewCategoryForm(CategoryForm):
+    pass
 
-            if self.active_images:  # Si hay imágenes activas y se quiere mantener alguna 
-                for image in self.active_images: 
-                    if not self.cleaned_data.get(f"keep_image_{image.id}", True): 
-                        image.delete() # Eliminar la imagen si el usuario no la quiere mantener, checkboxes desmarcados 
-        return post 
-"""
+#Actualizar categoria
+
+class UpdateCategory(CategoryForm):
+    pass
